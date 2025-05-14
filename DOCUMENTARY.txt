@@ -1,0 +1,196 @@
+Optimized File System Explorer
+===========================
+
+Table of Contents
+----------------
+1. Overview
+2. Features
+3. Commands
+4. File Structure
+5. Implementation Details
+6. Error Handling
+7. Usage Examples
+8. Technical Notes
+
+1. Overview
+-----------
+The Optimized File System Explorer is a command-line interface (CLI) application that provides
+efficient and safe file system operations. It's designed to be user-friendly while
+maintaining robust error handling and system safety features.
+
+2. Features
+-----------
+- Interactive command-line interface with current directory display
+- Case-insensitive file and directory search
+- Recursive directory traversal and display
+- Safe file system operations with error handling
+- Support for both absolute and relative paths
+- Special directory symbols support (~, ., ..)
+- System directory protection
+- Permission checking
+- Automatic parent directory creation
+- Path normalization
+
+3. Commands
+-----------
+search <directory>     Search for files/directories by name
+    - Performs recursive, case-insensitive search
+    - Shows both files and directories that match
+    - Displays full paths of matches
+    - Reports total number of matches found
+
+display <directory>    Show contents of directory
+    - Lists all files and directories recursively
+    - Indicates item types ([FILE] or [DIR])
+    - Skips system directories automatically
+    - Shows total item count
+
+cd [directory]         Change current directory
+    - Changes to home directory if no path specified
+    - Supports special symbols: ~ (home), . (current), .. (parent)
+    - Handles both absolute and relative paths
+    - Validates directory existence and accessibility
+
+mkdir <directory>      Create a new directory
+    - Creates parent directories automatically if needed
+    - Supports both absolute and relative paths
+    - Prevents overwriting existing directories
+
+touch <file>          Create a new empty file
+    - Creates parent directories automatically if needed
+    - Supports both absolute and relative paths
+    - Prevents overwriting existing files
+
+rm <path>             Delete a file or directory
+    - Recursively removes directories and their contents
+    - Shows number of items deleted for directories
+    - Prevents deletion of current working directory
+    - Confirms successful deletion
+
+mv <old> <new>        Rename or move a file or directory
+    - Supports both renaming and moving operations
+    - Creates parent directories automatically if needed
+    - Prevents overwriting existing files/directories
+    - Prevents renaming of current working directory
+
+help                  Show help message
+    - Displays all available commands
+    - Shows command syntax and descriptions
+    - Provides usage notes and path formatting tips
+
+exit/quit             Exit the program
+    - Safely terminates the application
+    - Displays goodbye message
+
+4. File Structure
+----------------
+src/
+├── main.cpp          Main program logic and command handling
+├── fs.h              Header file with function declarations
+├── fs_search.cpp     Search functionality implementation
+├── fs_display.cpp    Directory display functionality
+├── fs_cd.cpp         Directory navigation functionality
+├── shared.cpp        Holds variables shared between files (might be useless)
+└── fs_manage.cpp     File management operations
+
+5. Implementation Details
+------------------------
+Core Components:
+
+main.cpp:
+- Implements the command loop and user interface
+- Handles command parsing and routing
+- Provides help system and error reporting
+- Manages the command prompt display
+
+fs_search.cpp:
+- Implements recursive file/directory search
+- Uses case-insensitive string matching
+- Handles permission errors gracefully
+- Skips system directories automatically
+
+fs_display.cpp:
+- Implements recursive directory listing
+- Provides clear visual hierarchy
+- Handles permission errors gracefully
+- Shows item types and counts
+
+fs_cd.cpp:
+- Manages current working directory state
+- Handles path normalization
+- Validates directory accessibility
+- Supports special directory symbols
+
+fs_manage.cpp:
+- Implements file/directory creation
+- Handles safe deletion operations
+- Manages rename/move operations
+- Provides detailed operation feedback
+
+6. Error Handling
+----------------
+The application implements comprehensive error handling:
+
+- Path validation
+  * Checks for file/directory existence
+  * Validates permissions
+  * Prevents system directory access
+
+- Operation safety
+  * Prevents current directory deletion
+  * Checks for existing files before creation
+  * Validates source/destination for moves
+
+- Input validation
+  * Handles empty inputs
+  * Validates command arguments
+  * Manages malformed paths
+
+- System protection
+  * Skips system directories
+  * Prevents critical system file access
+  * Handles permission denied scenarios
+
+7. Usage Examples
+----------------
+Basic Navigation:
+$-cd Documents
+Changed directory to: C:\Users\Username\Documents
+
+File Search:
+$-search report
+Searching for 'report' in: C:\Users\Username\Documents
+[FILE] C:\Users\Username\Documents\report2023.txt
+[DIR] C:\Users\Username\Documents\reports
+Found 2 matches for 'report'
+
+Directory Creation:
+$-mkdir projects/new-project
+Created directory: C:\Users\Username\Documents\projects\new-project
+
+File Operations:
+$-touch projects/new-project/readme.txt
+Created file: C:\Users\Username\Documents\projects\new-project\readme.txt
+
+$-mv projects/new-project/readme.txt projects/new-project/README.md
+Renamed '...\readme.txt' to '...\README.md'
+
+$-rm projects/new-project
+Deleted directory and 1 contained items: ...\new-project
+
+8. Technical Notes
+-----------------
+- Built using C++17 filesystem library
+- Uses error_code for non-throwing filesystem operations
+- Implements RAII principles for resource management
+- Provides consistent error messaging
+- Uses path normalization for reliable operations
+- Maintains state using static working directory
+- Supports Unicode paths (platform-dependent)
+- Handles long paths with automatic abbreviation
+- Uses stack-based directory traversal for efficiency
+
+Note: This application requires C++17 or later for filesystem support.
+The application is designed to work on both Windows and Unix-like systems,
+though some features (like home directory detection) may behave differently
+based on the operating system.
