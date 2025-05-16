@@ -116,14 +116,34 @@ int main() {
             }
 
             if (command == "search") {
+                if (arg1.empty()) {
+                    std::cerr << "Error: search command requires a directory path\n";
+                    continue;
+                }
                 fsSearch(arg1);
             } else if (command == "display") {
+                if (arg1.empty()) {
+                    std::cerr << "Error: display command requires a directory path\n";
+                    continue;
+                }
                 fsDisplay(arg1);
             } else if (command == "mkdir") {
+                if (arg1.empty()) {
+                    std::cerr << "Error: mkdir command requires a directory path\n";
+                    continue;
+                }
                 fsCreate(arg1, true);
             } else if (command == "touch") {
+                if (arg1.empty()) {
+                    std::cerr << "Error: touch command requires a file path\n";
+                    continue;
+                }
                 fsCreate(arg1, false);
             } else if (command == "rm") {
+                if (arg1.empty()) {
+                    std::cerr << "Error: rm command requires a path\n";
+                    continue;
+                }
                 fsDelete(arg1);
             } else {
                 displayHelp();

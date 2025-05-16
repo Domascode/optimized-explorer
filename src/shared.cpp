@@ -26,5 +26,3 @@ bool shouldSkipPath(const std::string& path) {
     }
     return false;
 }
-
-std::string dir = "";
